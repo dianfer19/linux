@@ -1,0 +1,2 @@
+# linux
+comandos utiles
