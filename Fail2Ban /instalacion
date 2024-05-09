@@ -1,0 +1,46 @@
+sudo apt update && sudo apt upgrade -y
+sudo apt install fail2ban -y
+
+Configuración Básica de Fail2Ban
+Fail2Ban utiliza archivos de configuración ubicados en /etc/fail2ban. Sin embargo,
+para evitar perder configuraciones personalizadas en actualizaciones del paquete, se recomienda crear y
+editar archivos en el directorio /etc/fail2ban/jail.d/.
+
+Crear un archivo de configuración personalizado:
+Vamos a crear un archivo de configuración llamado sshd.conf dentro de
+/etc/fail2ban/jail.d/ para proteger el servicio SSH.
+
+sudo nano /etc/fail2ban/jail.d/sshd.conf
+
+Editar el archivo de configuración:
+Añade el siguiente contenido al archivo para proteger SSH. Esto configura Fail2Ban para monitorear
+intentos fallidos de inicio de sesión en el servicio SSH y bloquear la IP después
+de 5 intentos fallidos durante 10 minutos.
+
+[sshd]
+enabled = true
+port    = ssh
+filter  = sshd
+logpath = /var/log/auth.log
+maxretry = 5
+bantime = 600
+
+Guardar y cerrar el archivo:
+Guarda el archivo y cierra el editor. Puedes hacerlo en nano presionando CTRL+O,
+ENTER para guardar y luego CTRL+X para salir.
+Reiniciar Fail2Ban:
+Para aplicar los cambios, reinicia el servicio Fail2Ban:
+
+sudo systemctl restart fail2ban
+
+Verificar el funcionamiento de Fail2Ban
+Para asegurarte de que Fail2Ban está funcionando correctamente y está monitoreando los
+intentos de acceso, puedes verificar el estado del servicio y los registros de baneo:
+
+Verificar el estado del servicio:
+
+sudo systemctl status fail2ban
+
+Verificar los registros de baneo:
+
+sudo fail2ban-client status sshd
